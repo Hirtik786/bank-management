@@ -2,10 +2,11 @@
 #include <stdlib.h>
 
 char name[20], email[20], age[20];
-int accountNumber, create_password, enteredAccount, enteredPassword, value = 0, number, balance = 5000, withdrawAmount, depositAmount;
+int accountNumber, create_password, enteredAccount, enteredPassword, value = 0, number, balance = 5000, withdrawAmount, depositAmount, transferAmount, aNTransfer;
 char choice;
 FILE *detail;
-FILE *transactionDetail;
+FILE *balanceFile;
+FILE *transactionDetails;
 
 void create_account()
 {
@@ -40,9 +41,11 @@ void create_account()
     fprintf(detail, "Password : %d\n", create_password);
 
     fclose(detail);
-    transactionDetail = fopen("transactionDetail.txt", "w");
-    fprintf(transactionDetail, "Balance : %d\n", balance);
-    fclose(transactionDetail);
+    balanceFile = fopen("balanceFile.txt", "w");
+    fprintf(balanceFile, "Balance : %d\n", balance);
+    fclose(balanceFile);
+    transactionDetails = fopen("transactionDetails.txt", "w");
+    fclose(transactionDetails);
 }
 void accountDetails()
 {
@@ -68,26 +71,29 @@ void accountDetails()
 void accountBalance()
 {
     printf("Account Balance\n");
-    transactionDetail = fopen("transactionDetail.txt", "r");
-    fscanf(transactionDetail, "Balance : %d\n", &balance);
+    balanceFile = fopen("balanceFile.txt", "r");
+    fscanf(balanceFile, "Balance : %d\n", &balance);
     printf("Your Balance is  : %d rs\n", balance);
-    fclose(transactionDetail);
+    fclose(balanceFile);
 }
 void withdrawMoney()
 {
     printf("Withdraw Money\n");
     printf("Enter amount you want to withdraw : ");
     scanf("%d", &withdrawAmount);
-    transactionDetail = fopen("transactionDetail.txt", "r");
-    fscanf(transactionDetail, "Balance : %d\n", &balance);
-    fclose(transactionDetail);
-    transactionDetail = fopen("transactionDetail.txt", "w");
+    balanceFile = fopen("balanceFile.txt", "r");
+    fscanf(balanceFile, "Balance : %d\n", &balance);
+    fclose(balanceFile);
+    balanceFile = fopen("balanceFile.txt", "w");
     if (withdrawAmount <= balance)
     {
         printf("You have withdraw = %d rs\n", withdrawAmount);
         balance = balance - withdrawAmount;
-        fprintf(transactionDetail, "Balance : %d\n", balance);
-        fclose(transactionDetail);
+        fprintf(balanceFile, "Balance : %d\n", balance);
+        fclose(balanceFile);
+        transactionDetails = fopen("transactionDetails.txt", "a");
+        fprintf(transactionDetails, "You have withdrawn %d rs\n", withdrawAmount);
+        fclose(transactionDetails);
     }
     else
     {
@@ -99,15 +105,53 @@ void depositMoney()
     printf("Deposit Money\n");
     printf("Enter amount you want to deposit : ");
     scanf("%d", &depositAmount);
-    transactionDetail = fopen("transactionDetail.txt", "r");
-    fscanf(transactionDetail, "Balance : %d\n", &balance);
-    fclose(transactionDetail);
-    transactionDetail = fopen("transactionDetail.txt", "w");
+    balanceFile = fopen("balanceFile.txt", "r");
+    fscanf(balanceFile, "Balance : %d\n", &balance);
+    fclose(balanceFile);
+    balanceFile = fopen("balanceFile.txt", "w");
     printf("You have deposited = %d rs\n", depositAmount);
     balance = balance + depositAmount;
-    fprintf(transactionDetail, "Balance : %d\n", balance);
-    fclose(transactionDetail);
-    printf("You have not enough money");
+    fprintf(balanceFile, "Balance : %d\n", balance);
+    fclose(balanceFile);
+    transactionDetails = fopen("transactionDetails.txt", "a");
+    fprintf(transactionDetails, "You have deposited %d rs\n", depositAmount);
+    fclose(transactionDetails);
+}
+void moneyTransfer()
+{
+    printf("Transfer Money\n");
+    printf("Enter account number in which you want to transfer : ");
+    scanf("%d", &aNTransfer);
+    printf("Enter amount you want to transfer : ");
+    scanf("%d", &transferAmount);
+    balanceFile = fopen("balanceFile.txt", "r");
+    fscanf(balanceFile, "Balance : %d\n", &balance);
+    fclose(balanceFile);
+    balanceFile = fopen("balanceFile.txt", "w");
+    if (transferAmount <= balance)
+    {
+        printf("You have transfer %d rs to account number : %d\n", transferAmount, aNTransfer);
+        balance = balance - transferAmount;
+        fprintf(balanceFile, "Balance : %d\n", balance);
+        fclose(balanceFile);
+        transactionDetails = fopen("transactionDetails.txt", "a");
+        fprintf(transactionDetails, "You have transfer %d rs to account number : %d\n", transferAmount, aNTransfer);
+        fclose(transactionDetails);
+    }
+    else
+    {
+        printf("You have not enough money");
+    }
+}
+void transactionDetail()
+{
+    printf("Transaction Details\n");
+    transactionDetails = fopen("transactionDetails.txt", "r");
+    char buffer[50];
+    while (fgets(buffer, sizeof(buffer), transactionDetails) != NULL)
+    {
+        printf("%s", buffer);
+    }
 }
 void changePassword()
 {
@@ -182,9 +226,10 @@ void loginMenu()
     printf("\n3.Transfer a money");
     printf("\n4.Check a balance");
     printf("\n5.Account details");
-    printf("\n6.Change a password");
-    printf("\n7.loan");
-    printf("\n8.Exit\n");
+    printf("\n6.Transaction details");
+    printf("\n7.Change a password");
+    printf("\n8.loan");
+    printf("\n9.Exit\n");
     printf("\nEnter your choice : \n");
     scanf("%c", &choice);
 
@@ -199,9 +244,11 @@ void loginMenu()
         withdrawMoney();
         break;
     case '3':
-        printf("Money has been transferred");
+        system("cls");
+        moneyTransfer();
         break;
     case '4':
+        system("cls");
         accountBalance();
         break;
     case '5':
@@ -209,14 +256,18 @@ void loginMenu()
         accountDetails();
         break;
     case '6':
-        changePassword();
-        // printf("password");
+        system("cls");
+        transactionDetail();
         break;
     case '7':
+        system("cls");
+        changePassword();
+        break;
+    case '8':
         // loan();
         printf("amount has been added in your account");
         break;
-    case '8':
+    case '9':
         system("cls");
         exit(0);
     default:
@@ -268,7 +319,6 @@ void mainMenu()
         break;
     }
 }
-
 int main()
 {
     mainMenu();
@@ -276,6 +326,5 @@ int main()
     {
         loginMenu();
     }
-
     return 0;
 }

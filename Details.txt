@@ -1,5 +1,5 @@
-Name : hirtk
-Email : 12
+Name : hirtik
+Email : karwa
 Account Number : 1234
-Age : 12
-Password : 3456
+Age : 1234
+Password : 1234
