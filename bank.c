@@ -302,6 +302,7 @@ void mainMenu()
     case '1':
         system("cls");
         create_account();
+        system("cls");
         printf("\nYour Account has been created");
         login();
         break;

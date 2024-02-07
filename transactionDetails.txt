@@ -1,6 +1,0 @@
-You have withdrawn 5000 rs
-You have deposited 200000 rs
-You have transfer 23456 rs to account number : 456
-You have withdrawn 165432 rs
-You have withdrawn 10000 rs
-You have transfer 1009 rs to account number : 567
