@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char name[20], email[20], age[20];
-int accountNumber, create_password, enteredAccount, enteredPassword, value = 0, number, balance = 5000, withdrawAmount, depositAmount, transferAmount, aNTransfer;
+char name[20], email[20];
+int accountNumber, age, create_password, enteredAccount, enteredPassword, value = 0, value1 = 0, number, balance = 5000, withdrawAmount, depositAmount, transferAmount, aNTransfer;
 char choice;
 FILE *detail;
 FILE *balanceFile;
@@ -22,24 +22,26 @@ void create_account()
 
     printf("Enter your name : ");
     scanf("%s", name);
-    fprintf(detail, "Name : %s\n", name);
 
     printf("Enter your email : ");
     scanf("%s", email);
-    fprintf(detail, "Email : %s\n", email);
 
     printf("Create an account number : ");
     scanf("%d", &accountNumber);
-    fprintf(detail, "Account Number : %d\n", accountNumber);
 
     printf("Enter your age: ");
-    scanf("%s", age);
-    fprintf(detail, "Age : %s\n", age);
+    scanf("%d", &age);
 
     printf("Create a password : ");
     scanf("%d", &create_password);
-    fprintf(detail, "Password : %d\n", create_password);
-
+    if (age >= 18)
+    {
+        fprintf(detail, "Name : %s\n", name);
+        fprintf(detail, "Email : %s\n", email);
+        fprintf(detail, "Account Number : %d\n", accountNumber);
+        fprintf(detail, "Age : %d\n", age);
+        fprintf(detail, "Password : %d\n", create_password);
+    }
     fclose(detail);
     balanceFile = fopen("balanceFile.txt", "w");
     fprintf(balanceFile, "Balance : %d\n", balance);
@@ -58,19 +60,23 @@ void accountDetails()
     fscanf(detail, "Name : %s\n", name);
     fscanf(detail, "Email : %s\n", email);
     fscanf(detail, "Account Number : %d\n", &accountNumber);
-    fscanf(detail, "Age : %s\n", age);
+    fscanf(detail, "Age : %d\n", &age);
     fscanf(detail, "Password : %d\n", &create_password);
     fclose(detail);
-    printf("Details\n");
+     printf("\n\t************************\n");
+    printf("\t\tDetails\n");
+    printf("\t************************\n\n");
     printf("Name : %s\n", name);
     printf("Email : %s\n", email);
     printf("Account Number : %d\n", accountNumber);
-    printf("Age : %s\n", age);
+    printf("Age : %d\n", age);
     printf("Password : %d\n", create_password);
 }
 void accountBalance()
 {
-    printf("Account Balance\n");
+    printf("\n\t******************************\n");
+    printf("\t\tAccount Balance\n");
+    printf("\t******************************\n\n");
     balanceFile = fopen("balanceFile.txt", "r");
     fscanf(balanceFile, "Balance : %d\n", &balance);
     printf("Your Balance is  : %d rs\n", balance);
@@ -78,7 +84,9 @@ void accountBalance()
 }
 void withdrawMoney()
 {
-    printf("Withdraw Money\n");
+    printf("\n\t******************************\n");
+    printf("\t\tWithdraw Money\n");
+    printf("\t******************************\n\n");
     printf("Enter amount you want to withdraw : ");
     scanf("%d", &withdrawAmount);
     balanceFile = fopen("balanceFile.txt", "r");
@@ -102,7 +110,9 @@ void withdrawMoney()
 }
 void depositMoney()
 {
-    printf("Deposit Money\n");
+    printf("\n\t******************************\n");
+    printf("\t\tDeposit Money\n");
+    printf("\t******************************\n\n");
     printf("Enter amount you want to deposit : ");
     scanf("%d", &depositAmount);
     balanceFile = fopen("balanceFile.txt", "r");
@@ -119,7 +129,9 @@ void depositMoney()
 }
 void moneyTransfer()
 {
-    printf("Transfer Money\n");
+    printf("\n\t******************************\n");
+    printf("\t\tTransfer Money\n");
+    printf("\t******************************\n\n");
     printf("Enter account number in which you want to transfer : ");
     scanf("%d", &aNTransfer);
     printf("Enter amount you want to transfer : ");
@@ -145,7 +157,9 @@ void moneyTransfer()
 }
 void transactionDetail()
 {
-    printf("Transaction Details\n");
+    printf("\n\t******************************\n");
+    printf("\t\tTransaction Details\n");
+    printf("\t******************************\n\n");
     transactionDetails = fopen("transactionDetails.txt", "r");
     char buffer[50];
     while (fgets(buffer, sizeof(buffer), transactionDetails) != NULL)
@@ -163,6 +177,9 @@ void changePassword()
 
     fscanf(detail, "Password : %d\n", &create_password);
     fclose(detail);
+    printf("\n\t**************************\n");
+    printf("\t\tChange Password\n");
+    printf("\t**************************\n\n");
     printf("Password : %d\n", create_password);
     printf("Enter your new password : ");
     scanf("%d", &create_password);
@@ -174,7 +191,7 @@ void changePassword()
     fprintf(detail, "Name : %s\n", name);
     fprintf(detail, "Email : %s\n", email);
     fprintf(detail, "Account Number : %d\n", accountNumber);
-    fprintf(detail, "Age : %s\n", age);
+    fprintf(detail, "Age : %d\n", age);
     fprintf(detail, "Password : %d\n", create_password);
     fclose(detail);
 }
@@ -182,20 +199,19 @@ int login()
 {
     printf("\n\t**************************\n");
     printf("\t\tLogin\n");
-    printf("\t**************************\n");
+    printf("\t**************************\n\n");
 
     FILE *detail;
     detail = fopen("Details.txt", "r");
     if (detail == NULL)
     {
         printf("Error opening file!!\n");
-        return 0;
     }
 
     fscanf(detail, "Name : %s\n", name);
     fscanf(detail, "Email : %s\n", email);
     fscanf(detail, "Account Number : %d\n", &accountNumber);
-    fscanf(detail, "Age : %s\n", age);
+    fscanf(detail, "Age : %d\n", &age);
     fscanf(detail, "Password : %d\n", &create_password);
 
     fclose(detail);
@@ -220,7 +236,7 @@ void loginMenu()
 {
     printf("**********************************************\n");
     printf("Welcome to banking management System\n");
-    printf("**********************************************\n");
+    printf("**********************************************\n\n");
     printf("\n1.Depoit a Money");
     printf("\n2.Withdraw a Money");
     printf("\n3.Transfer a money");
@@ -290,7 +306,7 @@ void mainMenu()
 {
     printf("\t**************************\n");
     printf("\t\tMenu\n");
-    printf("\t**************************\n");
+    printf("\t**************************\n\n");
     printf("(1) Create an Account\n");
     printf("(2) Log in\n");
     printf("(3) Exit\n");
@@ -303,8 +319,15 @@ void mainMenu()
         system("cls");
         create_account();
         system("cls");
-        printf("\nYour Account has been created");
-        login();
+        if (age >= 18)
+        {
+            printf("\nYour Account has been created");
+            login();
+        }
+        else
+        {
+            printf("\nYou are under 18 you are not eligible for account creation");
+        }
         break;
     case '2':
         system("cls");
