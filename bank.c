@@ -2,11 +2,12 @@
 #include <stdlib.h>
 
 char name[20], email[20];
-int accountNumber, age, create_password, enteredAccount, enteredPassword, value = 0, value1 = 0, number, balance = 5000, withdrawAmount, depositAmount, transferAmount, aNTransfer;
+int accountNumber, age, create_password, enteredAccount, enteredPassword, value = 0, value1 = 0, number, balance = 5000, withdrawAmount, depositAmount, transferAmount, aNTransfer, loanAmount;
 char choice;
 FILE *detail;
 FILE *balanceFile;
 FILE *transactionDetails;
+FILE *loanDetails;
 
 void create_account()
 {
@@ -48,6 +49,8 @@ void create_account()
     fclose(balanceFile);
     transactionDetails = fopen("transactionDetails.txt", "w");
     fclose(transactionDetails);
+    loanDetails = fopen("loanDetails.txt", "w");
+    fclose(loanDetails);
 }
 void accountDetails()
 {
@@ -63,7 +66,7 @@ void accountDetails()
     fscanf(detail, "Age : %d\n", &age);
     fscanf(detail, "Password : %d\n", &create_password);
     fclose(detail);
-     printf("\n\t************************\n");
+    printf("\n\t************************\n");
     printf("\t\tDetails\n");
     printf("\t************************\n\n");
     printf("Name : %s\n", name);
@@ -195,6 +198,63 @@ void changePassword()
     fprintf(detail, "Password : %d\n", create_password);
     fclose(detail);
 }
+void loan()
+{
+    printf("\n\t**************************\n");
+    printf("\t\tLoan \n");
+    printf("\t**************************\n\n");
+
+    printf("\t##### Select a Loan Amount #####\n");
+    printf("1: 5000\n");
+    printf("2: 10000\n");
+    printf("3: 15000\n");
+    printf("4: 20000\n");
+    printf("Enter your choice : ");
+    scanf("%d", &choice);
+    balanceFile = fopen("balanceFile.txt", "r");
+    fscanf(balanceFile, "Balance : %d\n", &balance);
+    fclose(balanceFile);
+    loanDetails = fopen("loanDetails.txt", "r");
+    fscanf(loanDetails, "You have taken loan rs : %d\n", &loanAmount);
+    fclose(loanDetails);
+    if (loanAmount == 0)
+    {
+        switch (choice)
+        {
+        case '1':
+            loanAmount = 5000;
+            balance = balance + loanAmount;
+            break;
+        case '2':
+            loanAmount = 10000;
+            balance = balance + loanAmount;
+            break;
+        case '3':
+            loanAmount = 15000;
+            balance = balance + loanAmount;
+            break;
+        case '4':
+            loanAmount = 20000;
+            balance = balance + loanAmount;
+        default:
+            break;
+        }
+        printf("You have been granted rs: %d loan", loanAmount);
+        loanDetails = fopen("loanDetails.txt", "w");
+        fprintf(loanDetails, "You have taken loan rs : %d\n", loanAmount);
+        fclose(loanDetails);
+    }
+    else
+    {
+        printf("You have already taken loan rs : %d", loanAmount);
+    }
+
+    balanceFile = fopen("balanceFile.txt", "w");
+    fprintf(balanceFile, "Balance : %d\n", balance);
+    fclose(balanceFile);
+
+    printf("\n#### Thankyou for Choosing our Services! ####\n");
+}
 int login()
 {
     printf("\n\t**************************\n");
@@ -280,8 +340,8 @@ void loginMenu()
         changePassword();
         break;
     case '8':
-        // loan();
-        printf("amount has been added in your account");
+        system("cls");
+        loan();
         break;
     case '9':
         system("cls");
